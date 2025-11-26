@@ -1,0 +1,203 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+input {
+    -webkit-user-select: all;
+    -moz-user-select: all;
+    -ms-user-select: all;
+    user-select: all;
+}
+
+.container {
+    height: 100vh;
+    width: 100vw;
+}
+
+.page {
+    /* background-color: orange; */
+    height: 100%;
+    width: 100%;
+    display: none;
+    overflow: hidden;
+    padding: 20px;
+}
+
+.page.show {
+    display: flex;
+    /* background-color: orange; */
+}
+
+.notes {
+    height: 100%;
+    width: 100%;
+    /* background-color: burlywood; */
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    /* overflow-y: auto; */
+}
+
+.note {
+    font-size: 2em;
+    font-weight: 500;
+    /* background-color: orange; */
+    padding: 10px;
+    width: 100%;
+    text-align: center;
+}
+
+.note.done {
+    text-decoration: line-through;
+    color: #5f5555;
+    font-style: italic;
+}
+
+.hold-swip {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    pointer-events: none;
+    background: transparent;
+    overflow: hidden;
+}
+
+.hold-swip::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+
+    /* 1. Nền màu Gemini (Giữ nguyên) */
+    background: linear-gradient(45deg,
+            /* #4285f4, */
+            #ffffff,
+            /* #65d965, */
+            #d9cf65,
+            /* #d365d9, */
+            #ffffff);
+            /* #4285f4); */
+    background-size: 300% 300%;
+    animation: gemini-flow 1s ease infinite;
+
+    /* 2. MASKING HÌNH ELIP DỌC
+       Cú pháp: ellipse [Width] [Height] at [Side]
+    */
+
+    /* Điều chỉnh độ cong (bề ngang) của viền ở đây */
+    --curve-width: 50px;
+
+    /* Điều chỉnh chiều cao hiển thị:
+       - 50%: Nghĩa là bán kính dọc bằng 50% màn hình -> Đường cong chạm đúng 2 góc trên dưới (như hình vẽ của bạn).
+       - >50%: Đường cong sẽ duỗi thẳng hơn.
+       - <50%: Đường cong sẽ ngắn lại, không chạm góc.
+    */
+    --curve-height: 50%;
+
+    -webkit-mask-image:
+        /* Bên Trái: Tâm nằm sát mép trái (left center) */
+        radial-gradient(ellipse var(--curve-width) var(--curve-height) at left center, black 0%, transparent 100%),
+
+        /* Bên Phải: Tâm nằm sát mép phải (right center) */
+        radial-gradient(ellipse var(--curve-width) var(--curve-height) at right center, black 0%, transparent 100%);
+
+    mask-image:
+        radial-gradient(ellipse var(--curve-width) var(--curve-height) at left center, black 0%, transparent 100%),
+        radial-gradient(ellipse var(--curve-width) var(--curve-height) at right center, black 0%, transparent 100%);
+
+    /* Gộp mask */
+    -webkit-mask-composite: source-over;
+    mask-composite: add;
+}
+
+@keyframes gemini-flow {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+.hold-swip.hidden {
+    display: none;
+}
+
+.input {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.input input[type="text"] {
+    font-size: 2em;
+    font-weight: 500;
+    text-align: center;
+    height: fit-content;
+    padding: 10px;
+    outline: none;
+    border: none;
+    border-radius: 0;
+    /* border-bottom: 1px solid black; */
+}
+
+.mic-on {
+    --size: 10px;
+    height: var(--size);
+    width: var(--size);
+    background-color: red;
+    border-radius: 50%;
+}
+
+@keyframes mic-on-anim {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+.mic-on.inactive {
+    background-color: #5f5555;
+}
+
+.mic-on.active {
+    background-color: red;
+    animation: mic-on-anim 1s linear infinite;
+}
+
+.mic-on.pendding {
+    background-color: #00ff5e;
+    animation: mic-on-anim 1s linear infinite;
+}
+
+#btn-add-todo {
+    border-radius: 0;
+    font-size: 2em;
+    color: #000;
+}
+
+.page {
+    /* background-color: orange; */
+    height: 100%;
+    width: 100%;
+    display: none;
+    overflow: hidden;
+    padding: 20px;
+}

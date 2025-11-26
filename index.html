@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>Todoay PWA</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="theme-color" content="#ffffff">
+    <link rel="apple-touch-icon" href="icon-192.png">
+</head>
+<body>
+    <div class="container">
+        <div class="main page show">
+            <div class="notes">
+                </div>
+        </div>
+        
+        <div class="input page">
+            <input type="text" id="inp-todo" placeholder="Input to do">
+            <div style="display: flex; justify-content: center; align-items: center; gap: 5px;">
+                <label for="is-reminder">Reminder</label>
+                <input type="checkbox" id="is-reminder">
+            </div>
+            <input type="datetime-local" id="inp-datetime">
+            
+            <img id="btn-mic" style="width: 50px;" src="images/mic.png" alt="">
+            <div class="mic-on inactive"></div>
+            
+            <button id="btn-add-todo">ADD</button>
+        </div>
+
+        <div class="hold-swip hidden"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
