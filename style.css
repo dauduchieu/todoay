@@ -193,6 +193,19 @@ input {
     color: #000;
 }
 
+.settings {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.settings input[type="text"] {
+    outline: none;
+    padding: 10px;
+}
+
+
+
 .page {
     /* background-color: orange; */
     height: 100%;
@@ -201,3 +214,7 @@ input {
     overflow: hidden;
     padding: 20px;
 }
+
+
+
+
