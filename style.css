@@ -78,13 +78,13 @@ input {
 
     /* 1. Nền màu Gemini (Giữ nguyên) */
     background: linear-gradient(45deg,
-            /* #4285f4, */
-            #ffffff,
-            /* #65d965, */
-            #d9cf65,
+            #4285f4,
+            /* #ffffff, */
+            #65d965,
+            /* #d9cf65, */
             /* #d365d9, */
-            #ffffff);
-            /* #4285f4); */
+            /* #ffffff); */
+            #4285f4);
     background-size: 300% 300%;
     animation: gemini-flow 1s ease infinite;
 
