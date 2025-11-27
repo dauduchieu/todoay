@@ -234,6 +234,6 @@ input {
 }
 
 .histories {
-    overflow-y: auto;
+    overflow-y: scroll;
 }
 
