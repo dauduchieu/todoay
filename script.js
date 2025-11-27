@@ -197,7 +197,7 @@ DTSTAMP:${start}
 DTSTART:${start}
 DTEND:${end}
 SUMMARY:${summary}
-DESCRIPTION:Todoay Remind
+DESCRIPTION:Todoay Reminder
 BEGIN:VALARM
 TRIGGER:-PT0M
 ACTION:DISPLAY
@@ -511,6 +511,67 @@ btnSaveSetting.addEventListener('click', async () => {
     switchPage(mainPage);
 });
 
+
+
+// ======================================================
+// LOGIC HISTORY
+// ======================================================
+
+const historiesPage = $(".histories");
+const historyList = $(".histories");
+
+// Hàm format thời gian sang dạng đẹp (VD: 14:30 27/11/2025)
+function formatTime(timestamp) {
+    if (!timestamp) return "---";
+    const date = new Date(timestamp);
+    return date.toLocaleString('vi-VN', {
+        hour: '2-digit', minute: '2-digit',
+        day: '2-digit', month: '2-digit', year: 'numeric'
+    });
+}
+
+function formatTime(timestamp) {
+    if (!timestamp) return "---";
+    const date = new Date(timestamp);
+    return date.toLocaleString('vi-VN', {
+        hour: '2-digit', minute: '2-digit',
+        day: '2-digit', month: '2-digit', year: 'numeric'
+    });
+}
+
+async function renderHistory() {
+    console.log("render history")
+    try {
+        // 1. Lấy tất cả dữ liệu
+        const allTodos = await db.getAllTodos();
+        
+        // 2. Sắp xếp: Mới nhất lên đầu
+        allTodos.sort((a, b) => b.id - a.id);
+
+        // 3. Render HTML
+        historyList.innerHTML = allTodos.map(t => {
+            // Xác định loại
+            const typeStr = t.hasReminder ? "Reminder" : "Note";
+            
+            return `
+            <div class="note all ${t.isDone ? 'done' : ''}">
+                <span>${t.todo}</span>
+                
+                <span class="note-info">Type: ${typeStr}</span>
+                <span class="note-info">Created: ${formatTime(t.id)}</span>
+                <span class="note-info">Done Time: ${t.isDone ? formatTime(t.doneTime) : 'Not yet'}</span>
+            </div>
+            `;
+        }).join("");
+
+    } catch (error) {
+        console.error("Lỗi render history:", error);
+    }
+}
+
+renderHistory()
+
+
 // Gesture Effect
 document.body.addEventListener('long-press', () => swipEffect.classList.remove('hidden'));
 document.body.addEventListener('touchend', () => swipEffect.classList.add('hidden'));
@@ -526,37 +587,41 @@ document.body.addEventListener("long-press-swipe", (e) => {
 
     switch (direction) {
         case "up":
-            // Nếu đang ở Input hoặc Settings -> Vuốt lên để về Main
-            // if (isInputShow || isSettingsShow) {
-            //     switchPage(mainPage);
-            //     // Reset form input
-            //     inpTodo.value = ""; inpIsReminder.checked = false; inpDatetime.value = "";
-            // }
+
+            inpTodo.value = ""; inpIsReminder.checked = false; inpDatetime.value = "";
+            renderNotes()
 
             settingsPage.classList.remove("show")
             inputPage.classList.remove("show")
+            historiesPage.classList.remove("show")
             mainPage.classList.add("show")
 
             break;
 
         case "down":
-            // Nếu đang ở Main -> Vuốt xuống mở Input
-            // if (isMainShow) {
-            //     switchPage(inputPage);
-            //     const now = new Date();
-            //     now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
-            //     inpDatetime.value = now.toISOString().slice(0, 16);
-            //     setTimeout(() => inpTodo.focus(), 100);
-            // }
+            const now = new Date();
+            now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+            inpDatetime.value = now.toISOString().slice(0, 16);
+
             settingsPage.classList.remove("show")
             mainPage.classList.remove("show")
+            historiesPage.classList.remove("show")
             inputPage.classList.add("show")
             break;
 
         case "right":
             mainPage.classList.remove("show")
             inputPage.classList.remove("show")
+            historiesPage.classList.remove("show")
             settingsPage.classList.add("show")
+            break;
+
+        case "left":
+            renderHistory()
+            mainPage.classList.remove("show")
+            inputPage.classList.remove("show")
+            settingsPage.classList.remove("show")
+            historiesPage.classList.add("show")
             break;
     }
 });

@@ -69,6 +69,7 @@ input {
     pointer-events: none;
     background: transparent;
     overflow: hidden;
+    opacity: .5;
 }
 
 .hold-swip::before {
@@ -202,6 +203,23 @@ input {
 .settings input[type="text"] {
     outline: none;
     padding: 10px;
+}
+
+.histories {
+    display: flex;
+    flex-direction: column;
+}
+
+.note.all {
+    border-bottom: 1px solid #5f5555;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.note.all .note-info {
+    font-size: 0.5em;
 }
 
 
