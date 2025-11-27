@@ -448,11 +448,42 @@ micButton.addEventListener('click', async () => {
 
 // Register Service Worker
 
+// if ('serviceWorker' in navigator) {
+//     window.addEventListener('load', () => {
+//         navigator.serviceWorker.register('./sw.js')
+//         .then(reg => console.log('SW Registered!', reg.scope))
+//         .catch(err => console.log('SW Registration failed', err));
+//     });
+// }
+
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js')
-        .then(reg => console.log('SW Registered!', reg.scope))
+        navigator.serviceWorker.register('./sw.js?v=3') 
+        .then(registration => {
+            console.log('SW Registered!', registration.scope);
+
+            registration.onupdatefound = () => {
+                const installingWorker = registration.installing;
+                if (installingWorker == null) return;
+
+                installingWorker.onstatechange = () => {
+                    if (installingWorker.state === 'installed') {
+                        if (navigator.serviceWorker.controller) {
+                            console.log('Phát hiện update mới. Đang làm mới...');
+                        }
+                    }
+                };
+            };
+        })
         .catch(err => console.log('SW Registration failed', err));
+
+        let refreshing = false;
+        navigator.serviceWorker.addEventListener('controllerchange', () => {
+            if (!refreshing) {
+                window.location.reload();
+                refreshing = true;
+            }
+        });
     });
 }
 

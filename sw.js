@@ -1,5 +1,5 @@
-// sw.js
-const CACHE_NAME = 'todo-pwa-v2';
+const CACHE_NAME = 'todo-pwa-v3'; 
+
 const ASSETS = [
     './',
     './index.html',
@@ -10,31 +10,34 @@ const ASSETS = [
     './images/mic.png'
 ];
 
-// 1. Install Service Worker
 self.addEventListener('install', (e) => {
+    self.skipWaiting();
+
     e.waitUntil(
         caches.open(CACHE_NAME).then((cache) => {
+            console.log('[SW] Caching assets');
             return cache.addAll(ASSETS);
         })
     );
 });
 
-// 2. Activate Service Worker
 self.addEventListener('activate', (e) => {
     e.waitUntil(
         caches.keys().then((keys) => {
             return Promise.all(
                 keys.map((key) => {
                     if (key !== CACHE_NAME) {
+                        console.log('[SW] Clearing old cache:', key);
                         return caches.delete(key);
                     }
                 })
             );
+        }).then(() => {
+            return self.clients.claim();
         })
     );
 });
 
-// 3. Fetch Event
 self.addEventListener('fetch', (e) => {
     e.respondWith(
         caches.match(e.request).then((response) => {
